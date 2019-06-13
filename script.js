@@ -35,7 +35,7 @@ fetch(`http://localhost:3000/comidas`)
             const mediaItem = document.createElement('div');
             mediaItem.setAttribute('class', 'media mb-4');
             mediaItem.innerHTML = `
-            <img src="${prato.imagem}" alt="${prato.nome}" class="mr-3 img-thumbnail" width="200px">
+            <img src="${prato.img}" alt="${prato.nome}" class="mr-3 img-thumbnail" width="200px">
 
             <div class="media-body>
 
@@ -50,3 +50,4 @@ fetch(`http://localhost:3000/comidas`)
     .catch((erro)=>{
         console.log(erro)
     })
+    
