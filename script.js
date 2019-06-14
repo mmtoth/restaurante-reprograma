@@ -1,27 +1,3 @@
-// const comidas = [
-//   {
-//     nome: "Batata frita",
-//     descricao: "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus. ",
-//     imagem: "img/Batata-frita.jpg"
-//   },
-//   {
-//     nome: "Macarronada",
-//     descricao: "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus. ",
-//     imagem: "img/macarronada.jpg"
-//   },
-//   {
-//     nome: "Falafel",
-//     descricao: "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus. ",
-//     imagem: "img/falafel.jpg"
-//   },
-//   {
-//     nome: "Creme de abóbora",
-//     descricao: "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus. ",
-//     imagem: "img/creme-de-abobora.jpg"
-//   },
-
-// ]
-
 const container = document.querySelector('#items-cardapio')
 fetch(`http://localhost:3000/comidas`)
     .then((response) =>{
@@ -39,15 +15,63 @@ fetch(`http://localhost:3000/comidas`)
 
             <div class="media-body>
 
-                <h5 class="mt-0"><strong>${prato.nome}</strong></h5>
+                <h5 class="mt-0"><strong>${prato.nome}</strong></h5><br>
                 ${prato.descricao}
+                <br>
+                
               </div>`
+              
               container.appendChild(mediaItem);
-        }
-        )
-    }
-    )
-    .catch((erro)=>{
-        console.log(erro)
-    })
+              
+              const buttonDelete = document.createElement("button")
+              buttonDelete.textContent = "Remover"
+              buttonDelete.setAttribute("class", "btn btn-info")
+              buttonDelete.setAttribute("data-id", prato._id)
+              mediaItem.appendChild(buttonDelete)
+      
+              buttonDelete.addEventListener("click", () =>{
+                fetch(
+                  `http://localhost:3000/comidas/${prato._id}`,
+                  {
+                    method: 'DELETE',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }
+                ).then((response) => {
+                  console.log(response)
+                  if(response.status === 204) {
+                    window.location.reload()
+                  } else {
+                    window.alert("Deu erro ao deletar, sorry")
+                  }
+                })
+              })
+          })
+        })
+        .catch((erro)=>{
+          console.log(erro)
+        })
+      
+
     
+    const botao = document.querySelector('#criar_comida_button')
+    botao.addEventListener("click", criarComida)
+    
+    function criarComida () {
+      const nome = document.querySelector("#nome_input").value
+      const descricao = document.querySelector("#descricao_input").value
+      const img = document.querySelector("#imagem_input").value
+      const comida = {
+        nome, descricao, img
+      }
+      fetch(
+        'http://localhost:3000/comidas',
+        {
+          method: 'POST',
+          body: JSON.stringify(comida),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).then(response => console.log("criou!"))}
